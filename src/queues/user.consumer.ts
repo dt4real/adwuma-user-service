@@ -21,7 +21,7 @@ const consumeBuyerDirectMessage = async (channel: Channel): Promise<void> => {
     if (!channel) {
       channel = (await createConnection()) as Channel;
     }
-    const exchangeName = 'jobber-buyer-update';
+    const exchangeName = 'adwuma-buyer-update';
     const routingKey = 'user-buyer';
     const queueName = 'user-buyer-queue';
     await channel.assertExchange(exchangeName, 'direct');
@@ -56,7 +56,7 @@ const consumeSellerDirectMessage = async (channel: Channel): Promise<void> => {
     if (!channel) {
       channel = (await createConnection()) as Channel;
     }
-    const exchangeName = 'jobber-seller-update';
+    const exchangeName = 'adwuma-seller-update';
     const routingKey = 'user-seller';
     const queueName = 'user-seller-queue';
     await channel.assertExchange(exchangeName, 'direct');
@@ -93,7 +93,7 @@ const consumeReviewFanoutMessages = async (channel: Channel): Promise<void> => {
     if (!channel) {
       channel = (await createConnection()) as Channel;
     }
-    const exchangeName = 'jobber-review';
+    const exchangeName = 'adwuma-review';
     const queueName = 'seller-review-queue';
     await channel.assertExchange(exchangeName, 'fanout');
     const jobberQueue: Replies.AssertQueue = await channel.assertQueue(queueName, { durable: true, autoDelete: false });
@@ -104,7 +104,7 @@ const consumeReviewFanoutMessages = async (channel: Channel): Promise<void> => {
         await updateSellerReview(JSON.parse(msg!.content.toString()));
         await publishDirectMessage(
           channel,
-          'jobber-update-gig',
+          'adwuma-update-gig',
           'update-gig',
           JSON.stringify({ type: 'updateGig', gigReview: msg!.content.toString() }),
           'Message sent to gig service.'
@@ -122,7 +122,7 @@ const consumeSeedGigDirectMessages = async (channel: Channel): Promise<void> => 
     if (!channel) {
       channel = (await createConnection()) as Channel;
     }
-    const exchangeName = 'jobber-gig';
+    const exchangeName = 'adwuma-gig';
     const routingKey = 'get-sellers';
     const queueName = 'user-gig-queue';
     await channel.assertExchange(exchangeName, 'direct');
@@ -135,7 +135,7 @@ const consumeSeedGigDirectMessages = async (channel: Channel): Promise<void> => 
         const sellers: ISellerDocument[] = await getRandomSellers(parseInt(count, 10));
         await publishDirectMessage(
           channel,
-          'jobber-seed-gig',
+          'adwuma-seed-gig',
           'receive-sellers',
           JSON.stringify({ type: 'receiveSellers', sellers, count }),
           'Message sent to gig service.'
