@@ -25,9 +25,9 @@ const consumeBuyerDirectMessage = async (channel: Channel): Promise<void> => {
     const routingKey = 'user-buyer';
     const queueName = 'user-buyer-queue';
     await channel.assertExchange(exchangeName, 'direct');
-    const jobberQueue: Replies.AssertQueue = await channel.assertQueue(queueName, { durable: true, autoDelete: false });
-    await channel.bindQueue(jobberQueue.queue, exchangeName, routingKey);
-    channel.consume(jobberQueue.queue, async (msg: ConsumeMessage | null) => {
+    const adwumaQueue: Replies.AssertQueue = await channel.assertQueue(queueName, { durable: true, autoDelete: false });
+    await channel.bindQueue(adwumaQueue.queue, exchangeName, routingKey);
+    channel.consume(adwumaQueue.queue, async (msg: ConsumeMessage | null) => {
       const { type } = JSON.parse(msg!.content.toString());
       if (type === 'auth') {
         const { username, email, profilePicture, country, createdAt } = JSON.parse(msg!.content.toString());
@@ -60,9 +60,9 @@ const consumeSellerDirectMessage = async (channel: Channel): Promise<void> => {
     const routingKey = 'user-seller';
     const queueName = 'user-seller-queue';
     await channel.assertExchange(exchangeName, 'direct');
-    const jobberQueue: Replies.AssertQueue = await channel.assertQueue(queueName, { durable: true, autoDelete: false });
-    await channel.bindQueue(jobberQueue.queue, exchangeName, routingKey);
-    channel.consume(jobberQueue.queue, async (msg: ConsumeMessage | null) => {
+    const adwumaQueue: Replies.AssertQueue = await channel.assertQueue(queueName, { durable: true, autoDelete: false });
+    await channel.bindQueue(adwumaQueue.queue, exchangeName, routingKey);
+    channel.consume(adwumaQueue.queue, async (msg: ConsumeMessage | null) => {
       const { type, sellerId, ongoingJobs, completedJobs, totalEarnings, recentDelivery, gigSellerId, count } = JSON.parse(
         msg!.content.toString()
       );
@@ -96,9 +96,9 @@ const consumeReviewFanoutMessages = async (channel: Channel): Promise<void> => {
     const exchangeName = 'adwuma-review';
     const queueName = 'seller-review-queue';
     await channel.assertExchange(exchangeName, 'fanout');
-    const jobberQueue: Replies.AssertQueue = await channel.assertQueue(queueName, { durable: true, autoDelete: false });
-    await channel.bindQueue(jobberQueue.queue, exchangeName, '');
-    channel.consume(jobberQueue.queue, async (msg: ConsumeMessage | null) => {
+    const adwumaQueue: Replies.AssertQueue = await channel.assertQueue(queueName, { durable: true, autoDelete: false });
+    await channel.bindQueue(adwumaQueue.queue, exchangeName, '');
+    channel.consume(adwumaQueue.queue, async (msg: ConsumeMessage | null) => {
       const { type } = JSON.parse(msg!.content.toString());
       if (type === 'buyer-review') {
         await updateSellerReview(JSON.parse(msg!.content.toString()));
@@ -126,9 +126,9 @@ const consumeSeedGigDirectMessages = async (channel: Channel): Promise<void> => 
     const routingKey = 'get-sellers';
     const queueName = 'user-gig-queue';
     await channel.assertExchange(exchangeName, 'direct');
-    const jobberQueue: Replies.AssertQueue = await channel.assertQueue(queueName, { durable: true, autoDelete: false });
-    await channel.bindQueue(jobberQueue.queue, exchangeName, routingKey);
-    channel.consume(jobberQueue.queue, async (msg: ConsumeMessage | null) => {
+    const adwumaQueue: Replies.AssertQueue = await channel.assertQueue(queueName, { durable: true, autoDelete: false });
+    await channel.bindQueue(adwumaQueue.queue, exchangeName, routingKey);
+    channel.consume(adwumaQueue.queue, async (msg: ConsumeMessage | null) => {
       const { type } = JSON.parse(msg!.content.toString());
       if (type === 'getSellers') {
         const { count } = JSON.parse(msg!.content.toString());
